@@ -1,0 +1,180 @@
+{
+  "patients": [
+    {
+      "id": "p1",
+      "name": "Alice Johnson",
+      "surgeryType": "Appendectomy",
+      "dischargeDate": "2025-07-11",
+      "daysPostDischarge": 5,
+      "latestRisk": "GREEN"
+    },
+    {
+      "id": "p2",
+      "name": "Bob Smith",
+      "surgeryType": "Knee Replacement",
+      "dischargeDate": "2025-07-08",
+      "daysPostDischarge": 8,
+      "latestRisk": "YELLOW"
+    },
+    {
+      "id": "p3",
+      "name": "Carol Davis",
+      "surgeryType": "Abdominal Surgery",
+      "dischargeDate": "2025-07-13",
+      "daysPostDischarge": 3,
+      "latestRisk": "RED"
+    }
+  ],
+  "responses": [
+    {
+      "id": "r1-1",
+      "patientId": "p1",
+      "date": "2025-07-11",
+      "pain": 3,
+      "fever": "No",
+      "redness": "No",
+      "discharge": "No",
+      "risk": "GREEN"
+    },
+    {
+      "id": "r1-2",
+      "patientId": "p1",
+      "date": "2025-07-12",
+      "pain": 2,
+      "fever": "No",
+      "redness": "No",
+      "discharge": "No",
+      "risk": "GREEN"
+    },
+    {
+      "id": "r1-3",
+      "patientId": "p1",
+      "date": "2025-07-13",
+      "pain": 2,
+      "fever": "No",
+      "redness": "No",
+      "discharge": "No",
+      "risk": "GREEN"
+    },
+    {
+      "id": "r1-4",
+      "patientId": "p1",
+      "date": "2025-07-14",
+      "pain": 1,
+      "fever": "No",
+      "redness": "No",
+      "discharge": "No",
+      "risk": "GREEN"
+    },
+    {
+      "id": "r1-5",
+      "patientId": "p1",
+      "date": "2025-07-15",
+      "pain": 2,
+      "fever": "No",
+      "redness": "No",
+      "discharge": "No",
+      "risk": "GREEN"
+    },
+    {
+      "id": "r2-1",
+      "patientId": "p2",
+      "date": "2025-07-08",
+      "pain": 7,
+      "fever": "No",
+      "redness": "Yes",
+      "discharge": "No",
+      "risk": "YELLOW"
+    },
+    {
+      "id": "r2-2",
+      "patientId": "p2",
+      "date": "2025-07-09",
+      "pain": 6,
+      "fever": "No",
+      "redness": "Yes",
+      "discharge": "No",
+      "risk": "YELLOW"
+    },
+    {
+      "id": "r2-3",
+      "patientId": "p2",
+      "date": "2025-07-10",
+      "pain": 5,
+      "fever": "No",
+      "redness": "Yes",
+      "discharge": "No",
+      "risk": "YELLOW"
+    },
+    {
+      "id": "r2-4",
+      "patientId": "p2",
+      "date": "2025-07-11",
+      "pain": 6,
+      "fever": "No",
+      "redness": "Yes",
+      "discharge": "No",
+      "risk": "YELLOW"
+    },
+    {
+      "id": "r2-5",
+      "patientId": "p2",
+      "date": "2025-07-12",
+      "pain": 5,
+      "fever": "No",
+      "redness": "No",
+      "discharge": "No",
+      "risk": "GREEN"
+    },
+    {
+      "id": "r2-6",
+      "patientId": "p2",
+      "date": "2025-07-13",
+      "pain": 6,
+      "fever": "No",
+      "redness": "Yes",
+      "discharge": "No",
+      "risk": "YELLOW"
+    },
+    {
+      "id": "r2-7",
+      "patientId": "p2",
+      "date": "2025-07-14",
+      "pain": 6,
+      "fever": "No",
+      "redness": "Yes",
+      "discharge": "No",
+      "risk": "YELLOW"
+    },
+    {
+      "id": "r3-1",
+      "patientId": "p3",
+      "date": "2025-07-13",
+      "pain": 4,
+      "fever": "No",
+      "redness": "No",
+      "discharge": "No",
+      "risk": "GREEN"
+    },
+    {
+      "id": "r3-2",
+      "patientId": "p3",
+      "date": "2025-07-14",
+      "pain": 6,
+      "fever": "No",
+      "redness": "Yes",
+      "discharge": "No",
+      "risk": "YELLOW"
+    },
+    {
+      "id": "r3-3",
+      "patientId": "p3",
+      "date": "2025-07-15",
+      "pain": 8,
+      "fever": "Yes",
+      "redness": "Yes",
+      "discharge": "Yes",
+      "risk": "RED"
+    }
+  ]
+}
