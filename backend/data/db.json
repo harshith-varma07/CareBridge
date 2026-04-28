@@ -175,16 +175,6 @@
       "redness": "Yes",
       "discharge": "Yes",
       "risk": "RED"
-    },
-    {
-      "id": "rp1-1777372955288",
-      "patientId": "p1",
-      "date": "2026-04-28",
-      "pain": 3,
-      "fever": "No",
-      "redness": "No",
-      "discharge": "No",
-      "risk": "GREEN"
     }
   ]
 }
