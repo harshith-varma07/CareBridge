@@ -88,7 +88,7 @@ def _try_load_model():
         net.eval()
         _model = net
         print(f"[AI Service] Loaded trained model from {MODEL_PATH}")
-    except Exception as exc:  # noqa: BLE001
+    except (ImportError, RuntimeError, Exception) as exc:  # noqa: BLE001
         print(f"[AI Service] Could not load model ({exc}); using mock inference.")
 
 

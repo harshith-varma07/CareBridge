@@ -48,7 +48,7 @@ export default function ChatUI({ patient, onLogout }) {
 
   useEffect(() => {
     if (!loading) initChat();
-  }, [loading, todayDone]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [loading, todayDone]); // initChat is stable across renders (no external deps)
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -460,7 +460,7 @@ export default function ChatUI({ patient, onLogout }) {
                       fontWeight: "600",
                     }}
                   >
-                    📤 Upload &amp; Analyse
+                    📤 Upload &amp; Analyze
                   </button>
                 </div>
               )}

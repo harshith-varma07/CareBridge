@@ -23,6 +23,14 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB max
 });
 
+// Express error handler for multer errors (e.g. file too large)
+function handleMulterError(err, req, res, next) {
+  if (err && err.code === "LIMIT_FILE_SIZE") {
+    return res.status(413).json({ error: "Image file exceeds the 5 MB limit" });
+  }
+  next(err);
+}
+
 function readDB() {
   return JSON.parse(fs.readFileSync(DB_PATH, "utf-8"));
 }
@@ -87,7 +95,7 @@ router.get("/:id/responses", (req, res) => {
  *   4. Trend analysis: escalate YELLOW → RED if last 3 check-ins are worsening
  *   5. Build explanation string
  */
-router.post("/:id/responses", upload.single("image"), async (req, res) => {
+router.post("/:id/responses", upload.single("image"), handleMulterError, async (req, res) => {
   const db = readDB();
   const patient = db.patients.find((p) => p.id === req.params.id);
   if (!patient) return res.status(404).json({ error: "Patient not found" });
@@ -100,7 +108,9 @@ router.post("/:id/responses", upload.single("image"), async (req, res) => {
   // ── Step 1: rule-based risk ──────────────────────────────────────────────
   const ruleRisk = calculateRisk({ pain, fever, redness, discharge });
 
-  // ── Step 2: AI image inference (optional) ────────────────────────────────
+  // AI service base URL — configurable via AI_SERVICE_URL env var
+  // Timeout configurable via AI_SERVICE_TIMEOUT_MS env var (default: 5000 ms)
+  const aiTimeout = parseInt(process.env.AI_SERVICE_TIMEOUT_MS || "5000", 10);
   let imageRisk = null;
   let imageExplanation = null;
   let imageConfidence = null;
@@ -114,7 +124,7 @@ router.post("/:id/responses", upload.single("image"), async (req, res) => {
       });
       const aiRes = await axios.post(`${AI_SERVICE_URL}/predict-image`, form, {
         headers: form.getHeaders(),
-        timeout: 5000,
+        timeout: aiTimeout,
       });
       imageRisk = aiRes.data.risk;
       imageExplanation = aiRes.data.explanation;
@@ -154,7 +164,7 @@ router.post("/:id/responses", upload.single("image"), async (req, res) => {
   });
 
   const newResponse = {
-    id: `r${req.params.id.replace("p", "")}-${Date.now()}`,
+    id: `resp-${req.params.id}-${Date.now()}`,
     patientId: req.params.id,
     date: new Date().toISOString().split("T")[0],
     pain: Number(pain),
