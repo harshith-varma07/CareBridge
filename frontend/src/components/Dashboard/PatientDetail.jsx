@@ -23,33 +23,20 @@ function PainChart({ responses }) {
   return (
     <div style={{ overflowX: "auto" }}>
       <svg width={W} height={H} style={{ display: "block", margin: "0 auto" }}>
-        {/* Grid lines */}
         {[0, 2, 4, 6, 8, 10].map((v) => (
           <g key={v}>
             <line x1={PAD.left} y1={yPos(v)} x2={W - PAD.right} y2={yPos(v)} stroke="#f0f0f0" strokeWidth="1" />
             <text x={PAD.left - 4} y={yPos(v) + 4} textAnchor="end" fontSize="10" fill="#aaa">{v}</text>
           </g>
         ))}
-        {/* Area fill */}
         <polygon
           points={`${PAD.left},${PAD.top + innerH} ${points} ${xPos(n - 1)},${PAD.top + innerH}`}
           fill="rgba(7,94,84,0.08)"
         />
-        {/* Line */}
         <polyline points={points} fill="none" stroke="#075e54" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
-        {/* Dots */}
         {responses.map((r, i) => (
-          <circle
-            key={i}
-            cx={xPos(i)}
-            cy={yPos(r.pain)}
-            r={5}
-            fill={riskColor[r.risk] || "#27ae60"}
-            stroke="white"
-            strokeWidth="2"
-          />
+          <circle key={i} cx={xPos(i)} cy={yPos(r.pain)} r={5} fill={riskColor[r.risk] || "#27ae60"} stroke="white" strokeWidth="2" />
         ))}
-        {/* X-axis labels */}
         {responses.map((r, i) => {
           const d = new Date(r.date + "T00:00:00");
           const label = `${d.getMonth() + 1}/${d.getDate()}`;
@@ -69,6 +56,9 @@ export default function PatientDetail({ patient, onBack }) {
   const { responses = [] } = patient;
   const sorted = [...responses].sort((a, b) => new Date(a.date) - new Date(b.date));
 
+  // Show the AI Image column only if at least one response has imageRisk data
+  const hasImageData = sorted.some((r) => r.imageRisk);
+
   function formatDate(dateStr) {
     const d = new Date(dateStr + "T00:00:00");
     return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
@@ -78,10 +68,7 @@ export default function PatientDetail({ patient, onBack }) {
     <div style={{ padding: "0 0 24px" }}>
       {/* Patient header */}
       <div style={{ background: "#075e54", color: "white", padding: "16px 20px", display: "flex", alignItems: "center", gap: "12px" }}>
-        <button
-          onClick={onBack}
-          style={{ background: "none", border: "none", color: "white", fontSize: "20px", cursor: "pointer" }}
-        >
+        <button onClick={onBack} style={{ background: "none", border: "none", color: "white", fontSize: "20px", cursor: "pointer" }}>
           ←
         </button>
         <div>
@@ -121,18 +108,41 @@ export default function PatientDetail({ patient, onBack }) {
                   <th>Redness</th>
                   <th>Discharge</th>
                   <th>Risk</th>
+                  {hasImageData && <th>AI Image</th>}
                 </tr>
               </thead>
               <tbody>
                 {sorted.map((r) => (
-                  <tr key={r.id}>
-                    <td>{formatDate(r.date)}</td>
-                    <td><strong>{r.pain}/10</strong></td>
-                    <td style={{ color: r.fever === "Yes" ? "#e74c3c" : "#27ae60" }}>{r.fever}</td>
-                    <td style={{ color: r.redness === "Yes" ? "#f39c12" : "#27ae60" }}>{r.redness}</td>
-                    <td style={{ color: r.discharge === "Yes" ? "#e74c3c" : "#27ae60" }}>{r.discharge}</td>
-                    <td><RiskBadge risk={r.risk} size="small" /></td>
-                  </tr>
+                  <React.Fragment key={r.id}>
+                    <tr>
+                      <td>{formatDate(r.date)}</td>
+                      <td><strong>{r.pain}/10</strong></td>
+                      <td style={{ color: r.fever === "Yes" ? "#e74c3c" : "#27ae60" }}>{r.fever}</td>
+                      <td style={{ color: r.redness === "Yes" ? "#f39c12" : "#27ae60" }}>{r.redness}</td>
+                      <td style={{ color: r.discharge === "Yes" ? "#e74c3c" : "#27ae60" }}>{r.discharge}</td>
+                      <td>
+                        <RiskBadge risk={r.risk} size="small" />
+                        {r.trendAlert && (
+                          <span style={{ marginLeft: "6px", fontSize: "11px", color: "#8e44ad" }} title="Risk trend is escalating">📈</span>
+                        )}
+                      </td>
+                      {hasImageData && (
+                        <td>
+                          {r.imageRisk
+                            ? <RiskBadge risk={r.imageRisk} size="small" />
+                            : <span style={{ color: "#ccc" }}>—</span>}
+                        </td>
+                      )}
+                    </tr>
+                    {/* Explanation row — shown only when present */}
+                    {r.explanation && (
+                      <tr>
+                        <td colSpan={hasImageData ? 7 : 6} style={{ fontSize: "11px", color: "#777", fontStyle: "italic", paddingTop: "2px", paddingBottom: "8px", borderBottom: "1px solid #f0f0f0" }}>
+                          {r.explanation}
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
                 ))}
               </tbody>
             </table>
